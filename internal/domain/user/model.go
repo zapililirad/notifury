@@ -33,17 +33,19 @@ type password struct {
 	created  time.Time
 }
 
-func SetPassword(s string) password {
+func setPassword(p *password, s string) error {
 	//TODO: Implement password policy check
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(s), bcrypt.MinCost)
 	if err != nil {
-		return password{} //TODO: Check if this is secure solution
+		return err //TODO: Check if this is secure solution
 	}
 
-	return password{
+	p = &password{
 		created:  time.Now(),
 		password: string(hashedPassword),
 	}
+
+	return nil
 }
 
 func (p *password) CompareWithString(s string) error {
