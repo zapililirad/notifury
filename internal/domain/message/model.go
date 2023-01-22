@@ -1,27 +1,19 @@
 package message
 
 import (
-	"time"
-
-	"github.com/google/uuid"
 	"github.com/zapililirad/notifury/internal/domain/access"
 )
 
 type Message struct {
-	Text       string
-	Class      MessageClass
-	RecievedAt time.Time
+	Text  string
+	Class MessageClass
+	// RecievedAt time.Time - not now
 }
 
-func NewMessage(text string) Message {
-	return Message{
-		Text: text,
-		// TODO: Add constructor for MessageClass
-		Class: MessageClass{
-			UUID:      uuid.NewString(),
-			ClassName: "Generic",
-		},
-		RecievedAt: time.Now(),
+func NewMessage(class MessageClass, text string) *Message {
+	return &Message{
+		Text:  text,
+		Class: class,
 	}
 }
 
