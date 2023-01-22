@@ -11,8 +11,8 @@ type User struct {
 	UUID      string
 	FirstName string
 	LastName  string
-	Email     string
-	Active    bool
+	Email     string //Unique, login
+	IsActive  bool
 	password  password
 }
 
@@ -40,10 +40,8 @@ func setPassword(p *password, s string) error {
 		return err //TODO: Check if this is secure solution
 	}
 
-	p = &password{
-		created:  time.Now(),
-		password: string(hashedPassword),
-	}
+	p.password = string(hashedPassword)
+	p.created = time.Now()
 
 	return nil
 }

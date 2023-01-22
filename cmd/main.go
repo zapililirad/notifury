@@ -1,5 +1,5 @@
 package main
 
 func main() {
-	// entry point
+	// TODO: entry point
 }

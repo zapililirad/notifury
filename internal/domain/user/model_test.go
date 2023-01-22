@@ -33,14 +33,17 @@ func TestUser_SetPassword(t *testing.T) {
 	testCases := []struct {
 		name     string
 		password string
+		ok       bool
 	}{
 		{
 			name:     "Valid password",
 			password: "P@$$w0rd",
+			ok:       true,
 		},
 		{
 			name:     "Empty password",
 			password: "",
+			ok:       false,
 		},
 	}
 
@@ -51,6 +54,8 @@ func TestUser_SetPassword(t *testing.T) {
 			assert.NotEqual(t, tc.password, p.password)
 			assert.NotEmpty(t, p.password)
 			assert.IsType(t, time.Now(), p.created)
+			assert.NotEqual(t, &time.Time{}, p.created)
+
 		})
 	}
 }
@@ -91,40 +96,3 @@ func TestUser_PasswordCompareWithString(t *testing.T) {
 		})
 	}
 }
-
-// func TestUser_CreateUser(t *testing.T) {
-// 	f := UserFactory{}
-// 	u := f.CreateUser(
-// 		"Ivan",
-// 		"Petrov",
-// 		"ivan@example.org",
-// 	)
-
-// 	assert.Equal(t, "Ivan", u.FirstName)
-// 	assert.Equal(t, "Petrov", u.LastName)
-// 	assert.Equal(t, "ivan@example.org", u.Email)
-
-// 	_, err := uuid.Parse(u.UUID)
-// 	assert.NoError(t, err)
-// }
-
-// func TestUser_CreateUserWithPassword(t *testing.T) {
-// 	f := UserFactory{}
-// 	u := f.CreateUserWithPassword(
-// 		"Ivan",
-// 		"Petrov",
-// 		"ivan@example.org",
-// 		"P@$$w0rd",
-// 	)
-
-// 	assert.Equal(t, "Ivan", u.FirstName)
-// 	assert.Equal(t, "Petrov", u.LastName)
-// 	assert.Equal(t, "ivan@example.org", u.Email)
-
-// 	_, err := uuid.Parse(u.UUID)
-// 	assert.NoError(t, err)
-
-// 	assert.IsType(t, password{}, u.password)
-
-// 	assert.NoError(t, u.password.CompareWithString("P@$$w0rd"))
-// }
