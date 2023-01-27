@@ -6,6 +6,8 @@ on:
 
 jobs:
   sast-scan:
+    name: sast scanning AppThreat
+    runs-on: ubuntu-latest
     steps:
       - uses: AppThreat/sast-scan-action@master
         with:
