@@ -1,0 +1,14 @@
+name: Security check
+
+on:
+  push:
+
+
+jobs:
+  sast-scan:
+    steps:
+      - uses: AppThreat/sast-scan-action@master
+        with:
+          type: "go"
+
+
