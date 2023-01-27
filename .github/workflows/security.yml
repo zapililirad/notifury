@@ -15,6 +15,13 @@ jobs:
         with:
           type: "go"
 
-      
+      - uses: actions/upload-artifact@v1
+        with:
+          name: reports
+          path: reports
+
+      - uses: ShiftLeftSecurity/scan-action@master
+        with:
+          type: "credscan,go,depscan"
 
 
