@@ -1,19 +1,23 @@
 package message
 
 import (
+
+	"time"
+
 	"github.com/zapililirad/notifury/internal/domain/access"
 )
 
 type Message struct {
-	Text  string
-	Class MessageClass
-	// RecievedAt time.Time - not now
+	Text       string
+	Class      *MessageClass
+	RecievedAt time.Time
 }
 
-func NewMessage(class MessageClass, text string) *Message {
+func NewMessage(class *MessageClass, text string) *Message {
 	return &Message{
-		Text:  text,
-		Class: class,
+		Text:       text,
+		Class:      class,
+		RecievedAt: time.Now(),
 	}
 }
 
