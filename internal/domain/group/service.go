@@ -5,6 +5,7 @@ import (
 
 	"github.com/zapililirad/notifury/internal/app"
 	"github.com/zapililirad/notifury/internal/domain/access"
+	"github.com/zapililirad/notifury/internal/domain/user"
 )
 
 // type Service interface {
@@ -76,4 +77,9 @@ func (s *GroupService) HasGroupMemberRecursive(ctx context.Context, g *Group, sp
 	}
 
 	return false
+}
+
+func (s *GroupService) GetAllUsersRecursive(ctx context.Context, g *Group) []*user.User {
+	// TODO: Implement GetAllUsersRecursive
+	return nil
 }

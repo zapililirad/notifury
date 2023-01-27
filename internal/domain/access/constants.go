@@ -6,4 +6,5 @@ const (
 	User SecurityPrincipalType = iota
 	Group
 	MessageClass
+	DistributionPolicy
 )
