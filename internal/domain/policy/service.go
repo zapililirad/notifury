@@ -18,3 +18,7 @@ func (s *DistributionPolicyService) GetDistributionPoliciesByMessageClass(ctx co
 func (s *DistributionPolicyService) GetAllDistributionPolicies(ctx context.Context, limit, offset int) []*DistributionPolicy {
 	return nil
 }
+
+func (s *DistributionPolicyService) CreateDistributionPolicy(ctx context.Context) (*DistributionPolicy, error) {
+	return nil, app.ErrNotImplemented
+}

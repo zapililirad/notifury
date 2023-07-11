@@ -29,7 +29,7 @@ func NewRouterService(
 	}
 }
 
-func (s *RouterService) PushMessage(ctx context.Context, message *message.Message) error {
+func (s *RouterService) RouteMessage(ctx context.Context, message *message.Message) error {
 	// TODO: Make me pretty - need to refactor
 
 	policy, err := s.policyService.GetDistributionPoliciesByMessageClass(ctx, message.Class)
@@ -40,21 +40,19 @@ func (s *RouterService) PushMessage(ctx context.Context, message *message.Messag
 	users := []*user.User{}
 
 	for _, sp := range policy.Subscribers {
-
-		if sp.GetSecurityPrincipalType() == access.User {
+		switch sp.GetSecurityPrincipalType() {
+		case access.User:
 			users = append(users, sp.(*user.User))
-		}
-
-		if sp.GetSecurityPrincipalType() == access.Group {
+		case access.Group:
 			users = append(users, s.groupService.GetAllUsersRecursive(ctx, sp.(*group.Group))...)
 		}
 	}
 
-	for _, u := range users {
+	for _, u := range user.RemoveDuplicates(users) {
 		channels := s.channelService.GetNotificationChannelsByUser(ctx, u)
 
 		for _, c := range channels {
-			c.PushMessage(*message)
+			c.Notify(*message)
 		}
 
 	}

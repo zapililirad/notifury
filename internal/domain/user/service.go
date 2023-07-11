@@ -39,7 +39,10 @@ func (s *UserService) GetAllUsers(ctx context.Context, limit int, offset int) []
 
 func (s *UserService) CreateUser(ctx context.Context, firstname, lastname, email string) (*User, error) {
 	// access.Needs.CreateUser
-	// TODO: Add validation
+	if err := validateUser(firstname, lastname, email); err != nil {
+		return nil, err
+	}
+
 	return &User{
 		FirstName: firstname,
 		LastName:  lastname,

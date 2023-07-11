@@ -8,13 +8,23 @@ import (
 )
 
 type EmailChannel struct {
-	User *user.User
+	User     *user.User
+	IsActive bool
+	Email    string
 }
 
-func (c *EmailChannel) PushMessage(message message.Message) error {
+func (c *EmailChannel) Notify(message message.Message) error {
 	// TODO: Implement email notications
 
 	_, err := fmt.Printf("Email for user %s: %s", c.User.GetName(), message.Text)
 
 	return err
+}
+
+func (c *EmailChannel) GetNotificationChannelType() NotificationChannelType {
+	return Email
+}
+
+func (c *EmailChannel) GetUserUUID() string {
+	return c.User.GetSecurityUUID()
 }

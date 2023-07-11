@@ -20,7 +20,10 @@ func (s *MessageClassService) GetAllMessageClasses(ctx context.Context, limit, o
 }
 
 func (s *MessageClass) CreateMessageClass(ctx context.Context, name string) (*MessageClass, error) {
-	// TODO: Add validation
+	if err := app.ValidateName(name); err != nil {
+		return nil, err
+	}
+
 	return &MessageClass{
 		ClassName: name,
 		UUID:      uuid.NewString(),
