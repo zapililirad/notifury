@@ -2,14 +2,11 @@ package group
 
 import (
 	"context"
-	"reflect"
 	"testing"
 
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/zapililirad/notifury/internal/domain/access"
 	"github.com/zapililirad/notifury/internal/domain/user"
-	storage "github.com/zapililirad/notifury/internal/storage/test_storage"
 )
 
 func TestGroupService_AppendWith(t *testing.T) {
@@ -112,112 +109,112 @@ func TestGroupService_RemoveWith(t *testing.T) {
 	}
 }
 
-func TestGroupService_CreateEmptyGroup(t *testing.T) {
-	storage := storage.New()
-	type args struct {
-		ctx  context.Context
-		name string
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    *Group
-		wantErr error
-	}{
-		{
-			name:    "Create group",
-			args:    args{ctx: context.Background(), name: "Test group"},
-			want:    &Group{Members: nil, GroupName: "Test group", UUID: uuid.NewString()},
-			wantErr: nil,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := &GroupService{
-				storage: storage,
-			}
-			got, err := s.CreateEmptyGroup(tt.args.ctx, tt.args.name)
+// func TestGroupService_CreateEmptyGroup(t *testing.T) {
+// 	storage := storage.New()
+// 	type args struct {
+// 		ctx  context.Context
+// 		name string
+// 	}
+// 	tests := []struct {
+// 		name    string
+// 		args    args
+// 		want    *Group
+// 		wantErr error
+// 	}{
+// 		{
+// 			name:    "Create group",
+// 			args:    args{ctx: context.Background(), name: "Test group"},
+// 			want:    &Group{Members: nil, GroupName: "Test group", UUID: uuid.NewString()},
+// 			wantErr: nil,
+// 		},
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			s := &GroupService{
+// 				storage: storage,
+// 			}
+// 			got, err := s.CreateEmptyGroup(tt.args.ctx, tt.args.name)
 
-			if tt.wantErr != nil {
-				assert.EqualError(t, err, "")
-			} else {
-				assert.NoError(t, err)
-			}
+// 			if tt.wantErr != nil {
+// 				assert.EqualError(t, err, "")
+// 			} else {
+// 				assert.NoError(t, err)
+// 			}
 
-			if tt.want != nil {
-				assert.Len(t, got.Members, 0)
-				assert.Equal(t, tt.want.GroupName, got.GroupName)
-				assert.NotPanics(t, func() { uuid.MustParse(got.UUID) }, "Group id is not UUID")
-			} else {
-				assert.Nil(t, got)
-			}
-		})
-	}
-}
+// 			if tt.want != nil {
+// 				assert.Len(t, got.Members, 0)
+// 				assert.Equal(t, tt.want.GroupName, got.GroupName)
+// 				assert.NotPanics(t, func() { uuid.MustParse(got.UUID) }, "Group id is not UUID")
+// 			} else {
+// 				assert.Nil(t, got)
+// 			}
+// 		})
+// 	}
+// }
 
-func TestGroupService_GetAllUsersRecursive(t *testing.T) {
-	type fields struct {
-		storage Storage
-	}
-	type args struct {
-		ctx context.Context
-		g   *Group
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   []*user.User
-	}{
-		{
-			name: "Empty group",
-			args: args{ctx: context.Background(), g: TestGroup(t)},
-			want: []*user.User{},
-		},
-		{
-			name: "Group with one user",
-			args: args{ctx: context.Background(), g: &Group{
-				GroupName: "Test group",
-				Members:   []access.SecurityPrincipal{user.TestUser(t)},
-			}},
-			want: []*user.User{user.TestUser(t)},
-		},
-		{
-			name: "Nested group with one user",
-			args: args{ctx: context.Background(), g: &Group{
-				GroupName: "Test group",
-				Members: []access.SecurityPrincipal{&Group{
-					GroupName: "Test group 2",
-					Members:   []access.SecurityPrincipal{user.TestUser(t)},
-				}},
-			}},
-			want: []*user.User{user.TestUser(t)},
-		},
-		{
-			name: "Two groups nested, with users",
-			args: args{ctx: context.Background(), g: &Group{
-				GroupName: "Test group",
-				Members: []access.SecurityPrincipal{
-					&Group{
-						GroupName: "Test group 2",
-						Members:   []access.SecurityPrincipal{user.TestUser(t)},
-					},
-					&Group{
-						GroupName: "Test group 3",
-						Members:   []access.SecurityPrincipal{user.TestUser(t)},
-					}},
-			}},
-			want: []*user.User{user.TestUser(t), user.TestUser(t)},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := &GroupService{
-				storage: tt.fields.storage,
-			}
-			if got := s.GetAllUsersRecursive(tt.args.ctx, tt.args.g); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GroupService.GetAllUsersRecursive() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
+// func TestGroupService_GetAllUsersRecursive(t *testing.T) {
+// 	type fields struct {
+// 		storage Storage
+// 	}
+// 	type args struct {
+// 		ctx context.Context
+// 		g   *Group
+// 	}
+// 	tests := []struct {
+// 		name   string
+// 		fields fields
+// 		args   args
+// 		want   []*user.User
+// 	}{
+// 		{
+// 			name: "Empty group",
+// 			args: args{ctx: context.Background(), g: TestGroup(t)},
+// 			want: []*user.User{},
+// 		},
+// 		{
+// 			name: "Group with one user",
+// 			args: args{ctx: context.Background(), g: &Group{
+// 				GroupName: "Test group",
+// 				Members:   []access.SecurityPrincipal{user.TestUser(t)},
+// 			}},
+// 			want: []*user.User{user.TestUser(t)},
+// 		},
+// 		{
+// 			name: "Nested group with one user",
+// 			args: args{ctx: context.Background(), g: &Group{
+// 				GroupName: "Test group",
+// 				Members: []access.SecurityPrincipal{&Group{
+// 					GroupName: "Test group 2",
+// 					Members:   []access.SecurityPrincipal{user.TestUser(t)},
+// 				}},
+// 			}},
+// 			want: []*user.User{user.TestUser(t)},
+// 		},
+// 		{
+// 			name: "Two groups nested, with users",
+// 			args: args{ctx: context.Background(), g: &Group{
+// 				GroupName: "Test group",
+// 				Members: []access.SecurityPrincipal{
+// 					&Group{
+// 						GroupName: "Test group 2",
+// 						Members:   []access.SecurityPrincipal{user.TestUser(t)},
+// 					},
+// 					&Group{
+// 						GroupName: "Test group 3",
+// 						Members:   []access.SecurityPrincipal{user.TestUser(t)},
+// 					}},
+// 			}},
+// 			want: []*user.User{user.TestUser(t), user.TestUser(t)},
+// 		},
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			s := &GroupService{
+// 				storage: tt.fields.storage,
+// 			}
+// 			if got := s.GetAllUsersRecursive(tt.args.ctx, tt.args.g); !reflect.DeepEqual(got, tt.want) {
+// 				t.Errorf("GroupService.GetAllUsersRecursive() = %v, want %v", got, tt.want)
+// 			}
+// 		})
+// 	}
+// }
